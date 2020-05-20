@@ -5,8 +5,10 @@
  */
 package chessgame.pieces;
 
+import chessgame.Board;
 import chessgame.Box;
 import chessgame.Piece;
+import java.util.List;
 
 /**
  *
@@ -18,7 +20,7 @@ public class King extends Piece{
     }   
 
     @Override
-    public boolean checkMove(int sourceX, int sourceY, int destX, int destY) {
-        return true;
+    public List<Box> getMovableBox(Board board) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

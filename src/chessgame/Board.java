@@ -36,10 +36,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
                 int yMod = y % 2;
 
                 if ((xMod == 0 && yMod == 0) || (xMod == 1 && yMod == 1)) {
-                    boxses[x][y] = new Box(1, y, x);
+                    boxses[x][y] = new Box(this, Config.White.COLOR, x, y);
                     this.add(boxses[x][y]);
                 } else {
-                    boxses[x][y] = new Box(0, y, x);
+                    boxses[x][y] = new Box(this, Config.Black.COLOR, x, y);
                     this.add(boxses[x][y]);
                 }
             }
@@ -118,25 +118,32 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     @Override
     public void mouseReleased(MouseEvent e) {
         if(currPiece.getColor() != turn) {
-            System.out.println("mouse released");
             return;
         }
+        Box currentBox = currPiece.getBox();
         Box destBox = (Box) this.getComponentAt(new Point(e.getX(), e.getY()));
-        if(currPiece != null) {
-            if(currPiece.checkMove(currPiece.getBox().getxNum(), currPiece.getBox().getyNum(), destBox.getxNum(), destBox.getyNum())) {
-                Piece destPiece = destBox.getPiece();
-                if(destPiece != null && destPiece.getColor() == currPiece.getColor()) {
-                    currPiece.getBox().setDispPiece(true);
-                } else {
-                    currPiece.getBox().setPiece(null);
-                    destBox.setPiece(currPiece);
-                    currPiece.setBox(destBox);
-                    destBox.setDispPiece(true);
-                    turn = turn == 0 ? 1:0;
-                }
-            }
+        if(currPiece.move(destBox)) {
+            System.out.println("move successfully");
+            turn = turn == 0 ? 1:0;
+        } else {
+            currentBox.setDispPiece(true);
         }
         currPiece = null;
+//        if(currPiece != null) {
+//            if(currPiece.checkMove(destBox)) {
+//                Piece destPiece = destBox.getPiece();
+//                if(destPiece != null && destPiece.getColor() == currPiece.getColor()) {
+//                    currPiece.getBox().setDispPiece(true);
+//                } else {
+//                    currPiece.getBox().setPiece(null);
+//                    destBox.setPiece(currPiece);
+//                    currPiece.setBox(destBox);
+//                    destBox.setDispPiece(true);
+//                    turn = turn == 0 ? 1:0;
+//                }
+//            }
+//        }
+//        currPiece = null;
         repaint();
     }
 
@@ -157,6 +164,10 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 
     @Override
     public void mouseMoved(MouseEvent e) {
-    }     
+    }
+
+    public Box[][] getBoxses() {
+        return boxses;
+    }    
     
 }
