@@ -32,9 +32,9 @@ public class Box extends JComponent{
     @Override
     public void paintComponent(Graphics g) {
         if (this.color == Config.White.COLOR) {
-            g.setColor(new Color(221,192,127));
+            g.setColor(new Color(255,255,255));
         } else {
-            g.setColor(new Color(101,67,33));
+            g.setColor(new Color(105,105,105));
         }
         
         g.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());

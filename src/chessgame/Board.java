@@ -11,10 +11,12 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -22,13 +24,16 @@ import javax.swing.JPanel;
  */
 public class Board extends JPanel implements MouseListener, MouseMotionListener {
     
+    private final MainFrame mainFrame;
     private final Box[][] boxses = new Box[8][8];
     private int currX;
     private int currY;
     private int turn = 0;
+    private final CheckMate checkMate;
     private Piece currPiece;
     
-    public Board() {
+    public Board(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
         setLayout(new GridLayout(8, 8, 0, 0));
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
@@ -46,10 +51,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         }
         this.setSize(new Dimension(400, 400));
         initPieces();
-        
+        checkMate = new CheckMate((King) boxses[7][4].getPiece(), (King) boxses[0][4].getPiece(), this);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
-        
     }
     
     @Override
@@ -122,29 +126,27 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         }
         Box currentBox = currPiece.getBox();
         Box destBox = (Box) this.getComponentAt(new Point(e.getX(), e.getY()));
+        Piece targetPiece = destBox.getPiece();
         if(currPiece.move(destBox)) {
-            System.out.println("move successfully");
+            if(isKing(targetPiece)) {
+                repaint();
+                mainFrame.endGame(turn);
+                return;
+            }
+            checkMate.checkMate(turn);
             turn = turn == 0 ? 1:0;
         } else {
             currentBox.setDispPiece(true);
         }
         currPiece = null;
-//        if(currPiece != null) {
-//            if(currPiece.checkMove(destBox)) {
-//                Piece destPiece = destBox.getPiece();
-//                if(destPiece != null && destPiece.getColor() == currPiece.getColor()) {
-//                    currPiece.getBox().setDispPiece(true);
-//                } else {
-//                    currPiece.getBox().setPiece(null);
-//                    destBox.setPiece(currPiece);
-//                    currPiece.setBox(destBox);
-//                    destBox.setDispPiece(true);
-//                    turn = turn == 0 ? 1:0;
-//                }
-//            }
-//        }
-//        currPiece = null;
         repaint();
+    }
+    
+    public boolean isKing(Piece piece) {
+        if(piece!=null) {
+            return piece.getClass()==King.class;
+        }
+        return false;
     }
 
     @Override
@@ -157,8 +159,8 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        currX = e.getX() - 24;
-        currY = e.getY() - 24;
+        currX = e.getX() - 25;
+        currY = e.getY() - 25;
         repaint();
     }
 

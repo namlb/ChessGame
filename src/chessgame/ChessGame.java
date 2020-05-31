@@ -16,7 +16,7 @@ public class ChessGame {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        WindowFrame wf = new WindowFrame();
+        MainFrame wf = new MainFrame();
         wf.show();
     }
     

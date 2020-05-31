@@ -5,6 +5,7 @@
  */
 package chessgame;
 
+import chessgame.pieces.King;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -62,6 +63,7 @@ public abstract class Piece {
         } else return false;
     }
     
+      
     public void display(Graphics g){
         int x = box.getX();
         int y = box.getY();

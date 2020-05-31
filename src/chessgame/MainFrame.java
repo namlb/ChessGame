@@ -5,23 +5,21 @@
  */
 package chessgame;
 
-import java.awt.BorderLayout;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author namlb
  */
-public class WindowFrame extends javax.swing.JFrame {
-    
+public class MainFrame extends javax.swing.JFrame {
     private Board board;
-
     /**
-     * Creates new form WindowFrame
+     * Creates new form MainFrame
      */
-    public WindowFrame() {
+    public MainFrame() {
         initComponents();
-        Board board = new Board();
-        this.add(board, BorderLayout.CENTER);
+        this.board = new Board(this);
+        this.add(board);
     }
 
     /**
@@ -67,22 +65,30 @@ public class WindowFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(WindowFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(WindowFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(WindowFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(WindowFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new WindowFrame().setVisible(true);
+                new MainFrame().setVisible(true);
             }
         });
+    }
+    
+    public void endGame(int turn) {
+        String notif = (turn==Config.White.COLOR ? "White" : "Black") + " win";
+        JOptionPane.showMessageDialog(this, notif);
+        this.remove(board);
+        this.repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
